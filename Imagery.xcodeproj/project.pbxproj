@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E9103E481D106A4B00C900A3 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = E91AD14E1D104D49000ED124 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E9103E4A1D10810200C900A3 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9103E491D10810200C900A3 /* Filter.swift */; };
+		E9103E501D11B27700C900A3 /* FilterGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9103E4F1D11B27700C900A3 /* FilterGroup.swift */; };
 		E91AD1221D1046C2000ED124 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AD1211D1046C2000ED124 /* AppDelegate.swift */; };
 		E91AD1241D1046C2000ED124 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AD1231D1046C2000ED124 /* EditViewController.swift */; };
 		E91AD1271D1046C2000ED124 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E91AD1251D1046C2000ED124 /* Main.storyboard */; };
@@ -66,6 +67,7 @@
 
 /* Begin PBXFileReference section */
 		E9103E491D10810200C900A3 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		E9103E4F1D11B27700C900A3 /* FilterGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterGroup.swift; sourceTree = "<group>"; };
 		E91AD11E1D1046C2000ED124 /* Imagery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Imagery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E91AD1211D1046C2000ED124 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E91AD1231D1046C2000ED124 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				E91AD1211D1046C2000ED124 /* AppDelegate.swift */,
 				E91AD1231D1046C2000ED124 /* EditViewController.swift */,
 				E9103E491D10810200C900A3 /* Filter.swift */,
+				E9103E4F1D11B27700C900A3 /* FilterGroup.swift */,
 				E91AD1521D105932000ED124 /* FilterCell.swift */,
 				E91AD1251D1046C2000ED124 /* Main.storyboard */,
 				E91AD12B1D1046C2000ED124 /* Assets.xcassets */,
@@ -292,6 +295,7 @@
 				E91AD1531D105932000ED124 /* FilterCell.swift in Sources */,
 				E91AD1241D1046C2000ED124 /* EditViewController.swift in Sources */,
 				E91AD1221D1046C2000ED124 /* AppDelegate.swift in Sources */,
+				E9103E501D11B27700C900A3 /* FilterGroup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

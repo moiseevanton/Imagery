@@ -15,9 +15,16 @@ class FilterCell: UICollectionViewCell {
     @IBOutlet weak var filterImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     
-    func displayFilter(name: String, filter: GPUImageFilter, image: UIImage) {
-        let quickFilteredImage = filter.imageByFilteringImage(image)
+    func displayFilter(filter: Filter, image: UIImage) {
+        var quickFilteredImage: UIImage?
+        if (filter.source != nil) {
+            filter.type.useNextFrameForImageCapture()
+            filter.source?.processImage()
+            quickFilteredImage = filter.type.imageFromCurrentFramebuffer()
+        } else {
+            quickFilteredImage = filter.type.imageByFilteringImage(image)
+        }
         filterImageView.image = quickFilteredImage
-        nameLabel.text = name
+        nameLabel.text = filter.name
     }
 }

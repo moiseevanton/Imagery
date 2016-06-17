@@ -13,11 +13,15 @@ class Filter: NSObject {
     
     // MARK: Properties
     
-    var type: GPUImageFilter
+    var type: GPUImageOutput
+    var group: FilterGroup
     var name: String
+    var source: GPUImagePicture?
     
-    init(type: GPUImageFilter, name: String) {
+    init(type: GPUImageOutput, name: String, group: FilterGroup, source: GPUImagePicture?) {
         self.type = type
         self.name = name
+        self.group = group
+        self.source = source
     }
 }
