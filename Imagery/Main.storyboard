@@ -25,7 +25,7 @@
                                     <action selector="actionOnCAmera:" destination="JWa-PK-V8h" eventType="touchUpInside" id="Rcs-D9-UNk"/>
                                 </connections>
                             </button>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KCj-uh-1wp">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KCj-uh-1wp">
                                 <rect key="frame" x="-14" y="560" width="614" height="40"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="ry7-bD-hvP">
@@ -43,6 +43,7 @@
                                                 <state key="normal" title="Edit"/>
                                                 <connections>
                                                     <action selector="actionOnEdit:" destination="JWa-PK-V8h" eventType="touchUpInside" id="61k-fw-XRt"/>
+                                                    <segue destination="Hyn-gw-MnE" kind="show" id="SD7-UA-YNo"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mN2-iG-8Gp">
@@ -146,30 +147,11 @@
                         <outlet property="greyView" destination="KCj-uh-1wp" id="brA-KB-vWd"/>
                         <outlet property="greyViewHeight" destination="fTG-c5-XeN" id="R6i-PW-ASj"/>
                         <outlet property="myView" destination="c5D-lM-GbE" id="FU3-Lx-Z30"/>
-                        <segue destination="hrg-SJ-4O2" kind="show" id="S1l-ac-8Xp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="q67-eH-CBZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1759" y="177"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="G9B-Ga-pLD">
-            <objects>
-                <viewController id="hrg-SJ-4O2" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="112-S2-BPT"/>
-                        <viewControllerLayoutGuide type="bottom" id="70j-RP-Hb5"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="yMt-xL-ICg">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6fz-Ax-VaW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2492" y="182"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hCJ-E4-S8P">
@@ -188,6 +170,14 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIv-tP-m1g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1051" y="157"/>
+        </scene>
+        <!--Edit-->
+        <scene sceneID="NDT-ne-Wd1">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Edit" id="Hyn-gw-MnE" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="umU-D9-8vq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2492" y="182"/>
         </scene>
     </scenes>
 </document>

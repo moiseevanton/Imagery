@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "D1551FEAE75B10440126AB1D7240727CC81D9C47",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "D1551FEAE75B10440126AB1D7240727CC81D9C47" : 0,
+    "9962C2E23F60F2CC92DCDEE43FFD92E2699FB4FD" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D5E39866-010D-470E-896D-30C5E3059107",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "D1551FEAE75B10440126AB1D7240727CC81D9C47" : "Imagery\/",
+    "9962C2E23F60F2CC92DCDEE43FFD92E2699FB4FD" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Imagery",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Imagery.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/adamdahan\/Learning.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9962C2E23F60F2CC92DCDEE43FFD92E2699FB4FD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/moiseevanton\/Imagery.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "D1551FEAE75B10440126AB1D7240727CC81D9C47"
+    }
+  ]
+}
