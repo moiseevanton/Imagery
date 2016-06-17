@@ -10,4 +10,8 @@ import UIKit
 
 class Album: NSObject {
 
+    var images: Array<UIImage> = []
+    
+
+
 }
