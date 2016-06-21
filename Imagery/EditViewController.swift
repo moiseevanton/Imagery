@@ -15,14 +15,22 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     @IBOutlet weak var bottomBar: UIView!
     @IBOutlet weak var BottomBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var topConstraint: NSLayoutConstraint!
     var bottomBarIsOpen: Bool = false
     @IBOutlet weak var bottomBarButton: UIButton!
     @IBOutlet weak var photoView: UIImageView!
     @IBOutlet weak var filterCollection: UICollectionView!
-    var filterArray: NSArray?
+    var filterArray: [Filter]?
     var bottomButtonStack: UIStackView?
     var filterControl: UISegmentedControl?
-    var selectedFilterGroup: NSArray?
+    var selectedFilterGroup: [(UIImage, Filter)]?
+    var originalPhoto: UIImage?
+    var copyOfOriginalPhoto: UIImage?
+    var lowResOriginalPhoto: UIImage?
+    var standardFilters: [(UIImage, Filter)] = []
+    var specialFilters: [(UIImage, Filter)] = []
+    var distortedFilters: [(UIImage, Filter)] = []
+    var historyOfFilters: [(UIImage, Filter)] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,11 +45,27 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         // set up different filters
         setUpFilters()
         
+        // get processed images by applying those filters
+        applyFiltersToThumbnails(filterArray!, image: lowResOriginalPhoto!)
+        
         // set up the bottom buttons
         setUpBottomButtons()
         
         // set up the filter control
         setUpFilterControl()
+        
+        // get the selected filter group
+        getSelectedFilterGroup()
+        
+        // create copy of the original photo
+        let cgi = CGImageCreateCopy(originalPhoto!.CGImage)
+        copyOfOriginalPhoto = UIImage(CGImage: cgi!, scale: 1.0, orientation: originalPhoto!.imageOrientation)
+        
+        // set original photo as the image of the image view
+        photoView.image = originalPhoto
+        
+        // hide navigation bar
+        self.navigationController?.navigationBarHidden = true
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -52,7 +76,7 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func setUpBottomButtons() {
         
-        let buttonSymoblArray = ["↩︎", "⨯", "✓"]
+        let buttonSymoblArray = ["⨯", "↩︎", "✓"]
         let buttonArray = [].mutableCopy()
         var count: Int = 1
         for symbol in buttonSymoblArray {
@@ -110,6 +134,12 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func setUpFilters() {
         
+        // low res version of the original photo
+        UIGraphicsBeginImageContext(CGSizeMake(originalPhoto!.size.width/10, originalPhoto!.size.height/10))
+        originalPhoto?.drawInRect(CGRectMake(0, 0, originalPhoto!.size.width/10, originalPhoto!.size.height/10))
+        lowResOriginalPhoto = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
         // create some custom filters
         
         // standard filters
@@ -128,9 +158,9 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         falseColorFilter.setFirstColorRed(0.0, green: 0.0, blue: 0.5)
         falseColorFilter.setSecondColorRed(1.0, green: 0.0, blue: 0.0)
         
-        let sic1 = GPUImagePicture.init(image: UIImage(named: "supremeCat"))
+        let sic1 = GPUImagePicture.init(image: lowResOriginalPhoto)
         let shf1 = GPUImageSharpenFilter.init()
-        shf1.sharpness = -0.5
+        shf1.sharpness = -0.1
         let saf1 = GPUImageSaturationFilter.init()
         saf1.saturation = 1.5
         let cf1 = GPUImageContrastFilter.init()
@@ -143,15 +173,13 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         sic1.addTarget(gf1)
         
         // special filters
-        let motionBlurFilter = GPUImageMotionBlurFilter.init()
-        motionBlurFilter.blurSize = 0.95
         
         let polkaDotFilter = GPUImagePolkaDotFilter.init()
-        polkaDotFilter.dotScaling = 1.0
-        polkaDotFilter.fractionalWidthOfAPixel = 0.016
+        polkaDotFilter.dotScaling = 1.15
+        polkaDotFilter.fractionalWidthOfAPixel = 0.007
         
         let pixellateFilter = GPUImagePixellateFilter.init()
-        pixellateFilter.fractionalWidthOfAPixel = 0.009
+        pixellateFilter.fractionalWidthOfAPixel = 0.006
         
         let sketchFilter = GPUImageSketchFilter.init()
         sketchFilter.edgeStrength = 1.1
@@ -161,22 +189,59 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         let vignetteFilter = GPUImageVignetteFilter.init()
         
+        let sic2 = GPUImagePicture.init(image: lowResOriginalPhoto)
+        let gsf1 = GPUImageGrayscaleFilter.init()
+        let ef1 = GPUImageErosionFilter.init()
+        let cf2 = GPUImageContrastFilter.init()
+        cf2.contrast = 1.1
+        let sf2 = GPUImageSaturationFilter.init()
+        sf2.saturation = 1.2
+        let shf2 = GPUImageSharpenFilter.init()
+        shf2.sharpness = 2.0
+        gsf1.addTarget(ef1)
+        ef1.addTarget(cf2)
+        cf2.addTarget(sf2)
+        sf2.addTarget(shf2)
+        let gf2 = GPUImageFilterGroup.init()
+        gf2.initialFilters = [gsf1]
+        gf2.terminalFilter = shf2
+        sic2.addTarget(gf2)
+        
+        let smoothToonFilter = GPUImageSmoothToonFilter.init()
+        smoothToonFilter.blurRadiusInPixels = 1.0
+        smoothToonFilter.threshold = 0.3
+        smoothToonFilter.quantizationLevels = 10.0
+        
+        // distortion filters
+        let swirlFilter = GPUImageSwirlFilter.init()
+        
+        let bulgeDistortionFilter = GPUImageBulgeDistortionFilter.init()
+        
+        let pinchDistortionFilter = GPUImagePinchDistortionFilter.init()
+        
+        let stretchDistortionFilter = GPUImageStretchDistortionFilter.init()
+        
         // add them all to an array
-        filterArray = [Filter.init(type: GPUImageSepiaFilter.init(), name: "SP", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: GPUImageGrayscaleFilter.init(), name: "GS", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: GPUImageHazeFilter.init(), name: "HZ", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: whiteBalanceFilter, name: "WB", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: gf1, name: "MX", group: FilterGroup.Standard , source: sic1),
-                       Filter.init(type: monochromeFilter, name: "MN", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: hueFilter, name: "HUE", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: GPUImageColorInvertFilter.init(), name: "CI", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: falseColorFilter, name: "FC", group: FilterGroup.Standard, source: nil),
-                       Filter.init(type: motionBlurFilter, name: "MB", group: FilterGroup.Special, source: nil),
-                       Filter.init(type: polkaDotFilter, name: "PD", group: FilterGroup.Special, source: nil),
-                       Filter.init(type: pixellateFilter, name: "PX", group: FilterGroup.Special, source: nil),
-                       Filter.init(type: sketchFilter, name: "SK", group: FilterGroup.Special, source: nil),
-                       Filter.init(type: posterizeFilter, name: "PS", group: FilterGroup.Special, source: nil),
-                       Filter.init(type: vignetteFilter, name: "VG", group: FilterGroup.Special, source: nil)]
+        filterArray = [Filter.init(type: GPUImageSepiaFilter.init(), name: "SP", group: .Standard, source: nil),
+                       Filter.init(type: GPUImageGrayscaleFilter.init(), name: "GS", group: .Standard, source: nil),
+                       Filter.init(type: GPUImageHazeFilter.init(), name: "HZ", group: .Standard, source: nil),
+                       Filter.init(type: whiteBalanceFilter, name: "WB", group: .Standard, source: nil),
+                       Filter.init(type: gf1, name: "MX", group: .Standard , source: sic1),
+                       Filter.init(type: monochromeFilter, name: "MN", group: .Standard, source: nil),
+                       Filter.init(type: hueFilter, name: "HUE", group: .Standard, source: nil),
+                       Filter.init(type: GPUImageColorInvertFilter.init(), name: "CI", group: .Standard, source: nil),
+                       Filter.init(type: falseColorFilter, name: "FC", group: .Standard, source: nil),
+                       Filter.init(type: polkaDotFilter, name: "PD", group: .Special, source: nil),
+                       Filter.init(type: pixellateFilter, name: "PX", group: .Special, source: nil),
+                       Filter.init(type: posterizeFilter, name: "PS", group: .Special, source: nil),
+                       Filter.init(type: vignetteFilter, name: "VG", group: .Special, source: nil),
+                       Filter.init(type: smoothToonFilter, name: "ST", group: .Special, source: nil),
+                       Filter.init(type: gf2, name: "DL", group: .Special, source: sic2),
+                       Filter.init(type: sketchFilter, name: "SK", group: .Special, source: nil),
+                       Filter.init(type: swirlFilter, name: "SW", group: .Distortion, source: nil),
+                       Filter.init(type: bulgeDistortionFilter, name: "BD", group: .Distortion, source: nil),
+                       Filter.init(type: pinchDistortionFilter, name: "PD", group: .Distortion, source: nil),
+                       Filter.init(type: stretchDistortionFilter, name: "SD", group: .Distortion, source: nil)]
         
     }
     
@@ -187,15 +252,39 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // get selected group
-        getSelectedFilterGroup()
         return (selectedFilterGroup?.count)!
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("filterCell", forIndexPath: indexPath) as! FilterCell
-        let filter = selectedFilterGroup![indexPath.item] as! Filter
-        cell.displayFilter(filter, image: UIImage(named: "supremeCat")!)
+        let filterTuple = selectedFilterGroup![indexPath.item]
+        // make sure the cell is selected while scrolling through the collection view
+        if filterCollection.indexPathsForSelectedItems()?.count == 1 {
+            let ip = filterCollection.indexPathsForSelectedItems()?.last
+            if indexPath.item == ip?.item {
+                cell.layer.borderWidth = 3.0
+                cell.layer.borderColor = UIColor.lightGrayColor().CGColor
+            } else {
+                cell.layer.borderWidth = 0.0
+            }
+        } else {
+            cell.layer.borderWidth = 0.0
+        }
+        if filterTuple.1.group != FilterGroup.Distortion {
+//            let doubleTap = UITapGestureRecognizer(target: self, action: #selector(EditViewController.filterCellDoubleTapped(_:)))
+//            doubleTap.numberOfTapsRequired = 2
+//            doubleTap.delaysTouchesBegan = true
+//            cell.addGestureRecognizer(doubleTap)
+        } else {
+            let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(EditViewController.changeRadius(_:)))
+            let panGesture = UIPanGestureRecognizer(target: self, action: #selector(EditViewController.changeCenter(_:)))
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EditViewController.changeCenter(_:)))
+            photoView.userInteractionEnabled = true
+            photoView.addGestureRecognizer(pinchGesture)
+            photoView.addGestureRecognizer(panGesture)
+            photoView.addGestureRecognizer(tapGesture)
+        }
+        cell.displayFilter(filterTuple)
         cell.backgroundColor = UIColor.lightGrayColor()
         cell.layer.masksToBounds = true
         cell.layer.cornerRadius = 15
@@ -206,7 +295,17 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! FilterCell
-        photoView.image = cell.filterImageView.image
+        cell.layer.borderWidth = 3.0
+        cell.layer.borderColor = UIColor.lightGrayColor().CGColor
+        let filterTuple = selectedFilterGroup![indexPath.item]
+        photoView.image = applyFilter(filterTuple.1, img: copyOfOriginalPhoto!)
+        print("select")
+    }
+    
+    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as? FilterCell
+        cell?.layer.borderWidth = 0.0
+        print("deselect")
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -223,6 +322,7 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         UIView.animateWithDuration(0.25, delay: 0.0, options: [.CurveEaseInOut], animations: {
             self.bottomBarButton.transform = CGAffineTransformMakeRotation(angle)
             self.BottomBarHeightConstraint.constant = self.bottomBarIsOpen ? 95 : 20
+            self.topConstraint.constant = self.bottomBarIsOpen ? -67: 8
             self.view.layoutIfNeeded()
             }, completion: nil)
         bottomButtonStack?.hidden = !bottomBarIsOpen
@@ -234,6 +334,7 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func segmentedControlTapped(sender: UISegmentedControl) {
+        getSelectedFilterGroup()
         print(sender.selectedSegmentIndex)
         filterCollection.reloadData()
         let popUp = UIView(frame: self.filterCollection.frame)
@@ -242,24 +343,123 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
             popUp.removeFromSuperview()
             self.view.layoutIfNeeded()
         }
+        print("Selected cells\(filterCollection.indexPathsForSelectedItems()?.count)")
     }
     
     func getSelectedFilterGroup() {
-        let result = [].mutableCopy()
-        for filter in filterArray as! [Filter] {
-            if filterControl?.selectedSegmentIndex == 0 && filter.group == FilterGroup.Standard {
-                result.addObject(filter)
-            }
-            
-            if filterControl?.selectedSegmentIndex == 1 && filter.group == FilterGroup.Special {
-                result.addObject(filter)
-            }
-            
-            if filterControl?.selectedSegmentIndex == 2 && filter.group == FilterGroup.Distortion {
-                result.addObject(filter)
+        switch self.filterControl!.selectedSegmentIndex {
+        case 0:
+            selectedFilterGroup = standardFilters
+        case 1:
+            selectedFilterGroup = specialFilters
+        case 2:
+            selectedFilterGroup = distortedFilters
+        default:
+            break
+        }
+    }
+    
+    func applyFiltersToThumbnails(filters: [Filter], image: UIImage) {
+        var quickFilteredImage: UIImage?
+        for filter in filters {
+            quickFilteredImage = applyFilter(filter, img: image)
+            switch filter.group {
+            case .Standard:
+                self.standardFilters.append((quickFilteredImage!, filter))
+            case .Special:
+                self.specialFilters.append((quickFilteredImage!, filter))
+            case .Distortion:
+                self.distortedFilters.append((quickFilteredImage!, filter))
             }
         }
-        selectedFilterGroup = result as? NSArray
+    }
+    
+    func applyFilter(filter: Filter, img: UIImage) -> UIImage {
+        var quickFilteredImage: UIImage?
+        if (filter.source != nil) {
+            filter.type.useNextFrameForImageCapture()
+            filter.source?.processImage()
+            quickFilteredImage = filter.type.imageFromCurrentFramebuffer()
+        } else {
+            quickFilteredImage = filter.type.imageByFilteringImage(img)
+        }
+        if historyOfFilters.count == 0 {
+            historyOfFilters.append((quickFilteredImage!, filter))
+        }
+        return quickFilteredImage!
+    }
+    
+//    func filterCellDoubleTapped(sender: UILongPressGestureRecognizer) {
+//        let ip = filterCollection.indexPathForItemAtPoint(sender.locationInView(filterCollection))
+//        let cell = filterCollection.cellForItemAtIndexPath(ip!)
+//        let selectedFilterTuple = selectedFilterGroup![ip!.item]
+//        if sender.state == UIGestureRecognizerState.Ended {
+//            print(ip?.item)
+//            if filterCollection.indexPathsForSelectedItems()!.count == 1 {
+//                let initialIP = filterCollection.indexPathsForSelectedItems()?.last
+//                let initalFilterTuple = selectedFilterGroup![initialIP!.item]
+//                
+//            }
+//        }
+//    }
+    
+    func changeRadius(sender: UIPinchGestureRecognizer) {
+        if filterCollection.indexPathsForSelectedItems()?.count == 1 && sender.numberOfTouches() == 2 {
+            let ip = filterCollection.indexPathsForSelectedItems()?.last
+            let filterTuple = selectedFilterGroup![ip!.item]
+            let filterBundle = filterTuple.1
+            let dx = sender.locationOfTouch(1, inView: photoView).x - sender.locationOfTouch(0, inView: photoView).x
+            let dy = sender.locationOfTouch(1, inView: photoView).y - sender.locationOfTouch(0, inView: photoView).y
+            let normalizedDifference = sqrt(pow(dx, 2) + pow(dy, 2))/sqrt(pow(photoView.frame.size.height, 2) + pow(photoView.frame.size.width, 2))
+            if filterBundle.group == FilterGroup.Distortion {
+                let filter = filterBundle.type
+                if ip?.item == 0 {
+                    let theFilter = filter as! GPUImageSwirlFilter
+                    theFilter.radius = normalizedDifference
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                } else if ip?.item == 1 {
+                    let theFilter = filter as! GPUImageBulgeDistortionFilter
+                    theFilter.radius = normalizedDifference
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                } else if ip?.item == 2 {
+                    let theFilter = filter as! GPUImagePinchDistortionFilter
+                    theFilter.radius = normalizedDifference
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                } else {
+                    // do nothing
+                }
+                
+            }
+        }
+    }
+    
+    func changeCenter(sender: UIGestureRecognizer) {
+        if filterCollection.indexPathsForSelectedItems()?.count == 1 {
+            let ip = filterCollection.indexPathsForSelectedItems()?.last
+            let filterTuple = selectedFilterGroup![ip!.item]
+            let filterBundle = filterTuple.1
+            let touchPoint = sender.locationInView(photoView)
+            if filterBundle.group == FilterGroup.Distortion {
+                let filter = filterBundle.type
+                if ip?.item == 0 {
+                    let theFilter = filter as! GPUImageSwirlFilter
+                    theFilter.center = CGPointMake(touchPoint.x/photoView.frame.size.width, touchPoint.y/photoView.frame.size.height)
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                } else if ip?.item == 1 {
+                    let theFilter = filter as! GPUImageBulgeDistortionFilter
+                    theFilter.center = CGPointMake(touchPoint.x/photoView.frame.size.width, touchPoint.y/photoView.frame.size.height)
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                } else if ip?.item == 2 {
+                    let theFilter = filter as! GPUImagePinchDistortionFilter
+                    theFilter.center = CGPointMake(touchPoint.x/photoView.frame.size.width, touchPoint.y/photoView.frame.size.height)
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                } else {
+                    let theFilter = filter as! GPUImageStretchDistortionFilter
+                    theFilter.center = CGPointMake(touchPoint.x/photoView.frame.size.width, touchPoint.y/photoView.frame.size.height)
+                    photoView.image = applyFilter(filterBundle, img: copyOfOriginalPhoto!)
+                }
+            }
+        }
     }
 }
 

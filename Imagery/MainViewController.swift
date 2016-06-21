@@ -118,8 +118,8 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
        
-selectedIndexes=collectionView.indexPathsForSelectedItems()!
-       print(selectedIndexes.count)
+        self.selectedIndexes = collectionView.indexPathsForSelectedItems()!
+        print(selectedIndexes.count)
         
         if selectedIndexes.count > 0 {
         greyView.hidden = false
@@ -178,8 +178,8 @@ selectedIndexes=collectionView.indexPathsForSelectedItems()!
         var cell = collectionView.cellForItemAtIndexPath(indexPath)
         cell?.layer.borderWidth = 0.0
         
-        selectedIndexes = collectionView.indexPathsForSelectedItems()!
-
+        self.selectedIndexes = collectionView.indexPathsForSelectedItems()!
+        print(selectedIndexes.count)
         if collectionView.indexPathsForSelectedItems()!.count > 0 {
             greyView.hidden = false
             
@@ -187,9 +187,6 @@ selectedIndexes=collectionView.indexPathsForSelectedItems()!
             greyView.hidden =  true
             
         }
-
-        
-        print(selectedIndexes.count)
         
     }
     
@@ -250,9 +247,23 @@ selectedIndexes=collectionView.indexPathsForSelectedItems()!
    // edit Button Clicked
     
     @IBAction func actionOnEdit(sender: AnyObject) {
-        
-        
-        
+        if selectedIndexes.count > 1 {
+            let alertController = UIAlertController.init(title: "Warning!", message: "Cannot edit multiple photos, please choose one.", preferredStyle: UIAlertControllerStyle.Alert)
+            let alertAction = UIAlertAction.init(title: "Got it!", style: UIAlertActionStyle.Default, handler: nil)
+            alertController.addAction(alertAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    // pass the photo to edit view controller
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "editSegue" {
+            let ip = selectedIndexes.lastObject as! NSIndexPath
+            let cell = collectionView.cellForItemAtIndexPath(ip) as! CustomCollectionViewCell
+            let dvc = segue.destinationViewController as! EditViewController
+            dvc.originalPhoto = cell.imagePicked.image
+        }
     }
     
     // Delete Button Clicked
