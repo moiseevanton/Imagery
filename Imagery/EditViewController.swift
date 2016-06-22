@@ -270,12 +270,7 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         } else {
             cell.layer.borderWidth = 0.0
         }
-        if filterTuple.1.group != FilterGroup.Distortion {
-//            let doubleTap = UITapGestureRecognizer(target: self, action: #selector(EditViewController.filterCellDoubleTapped(_:)))
-//            doubleTap.numberOfTapsRequired = 2
-//            doubleTap.delaysTouchesBegan = true
-//            cell.addGestureRecognizer(doubleTap)
-        } else {
+        if filterTuple.1.group == FilterGroup.Distortion {
             let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(EditViewController.changeRadius(_:)))
             let panGesture = UIPanGestureRecognizer(target: self, action: #selector(EditViewController.changeCenter(_:)))
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EditViewController.changeCenter(_:)))
@@ -330,7 +325,7 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func buttonTapped(sender: UIButton) {
-        print("heeey")
+        
     }
     
     func segmentedControlTapped(sender: UISegmentedControl) {
@@ -388,20 +383,6 @@ class EditViewController: UIViewController, UICollectionViewDelegate, UICollecti
         }
         return quickFilteredImage!
     }
-    
-//    func filterCellDoubleTapped(sender: UILongPressGestureRecognizer) {
-//        let ip = filterCollection.indexPathForItemAtPoint(sender.locationInView(filterCollection))
-//        let cell = filterCollection.cellForItemAtIndexPath(ip!)
-//        let selectedFilterTuple = selectedFilterGroup![ip!.item]
-//        if sender.state == UIGestureRecognizerState.Ended {
-//            print(ip?.item)
-//            if filterCollection.indexPathsForSelectedItems()!.count == 1 {
-//                let initialIP = filterCollection.indexPathsForSelectedItems()?.last
-//                let initalFilterTuple = selectedFilterGroup![initialIP!.item]
-//                
-//            }
-//        }
-//    }
     
     func changeRadius(sender: UIPinchGestureRecognizer) {
         if filterCollection.indexPathsForSelectedItems()?.count == 1 && sender.numberOfTouches() == 2 {
