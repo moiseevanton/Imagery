@@ -11,7 +11,10 @@ import ALCameraViewController
 
 class MainViewController: UIViewController,UIImagePickerControllerDelegate,
 UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDelegate  {
+    @IBOutlet weak var shareButton: UIButton!
+    
 
+    @IBOutlet weak var cameraButton: UIButton!
    
     @IBOutlet weak var greyViewHeight: NSLayoutConstraint!
     @IBOutlet weak var greyView: UIView!
@@ -19,29 +22,31 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
   
     
     @IBOutlet var myView: UIView!
-    let kHeightShort: CGFloat = 10
+    let kHeightShort: CGFloat = 0
     let kHeightLong: CGFloat = 50
     var stretched = false
     var deleteisSelected = false
     var images: Array<UIImage> = []
-    var index:Int?
+   
     var selectedIndexes=[]
 
+    @IBOutlet weak var socialView: UIView!
     
     // when View Loads
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-       
+        cameraButton.setImage(UIImage(named: "lens.png"), forState: UIControlState.Normal)
+        
+        self.navigationController?.navigationBar.barTintColor = UIColor.blackColor()
+        greyViewHeight.constant=kHeightShort
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
-
+        
         layout.itemSize = CGSize(width: 80, height: 100)
         layout.minimumLineSpacing=20
         self.collectionView.collectionViewLayout = layout
-       
-    self.collectionView.allowsMultipleSelection = true
-    
+        self.collectionView.allowsMultipleSelection = true
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,11 +58,11 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
   // Camera Buttons Clicked
     @IBAction func actionOnCAmera(sender: AnyObject) {
         let croppingEnabled = false
-        let cameraViewController = CameraViewController(croppingEnabled: croppingEnabled) { image in
-        
-            self.images.append(image.0!)
+        let cameraViewController = CameraViewController(croppingEnabled: croppingEnabled,allowsLibraryAccess: true) { image in
+            if let img = image.0 {
+                self.images.append(img)
+            }
             self.dismissViewControllerAnimated(true, completion: { self.collectionView.reloadData() })
-            
         }
         
         presentViewController(cameraViewController, animated: true, completion: nil)
@@ -81,7 +86,7 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
         
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.PhotoLibrary) {
             
-            var imagePicker = UIImagePickerController()
+            let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary;
             imagePicker.allowsEditing = false
@@ -117,79 +122,43 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
     // MARK: - UICollectionViewDelegate protocol
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-       
-selectedIndexes=collectionView.indexPathsForSelectedItems()!
-       print(selectedIndexes.count)
         
-        if selectedIndexes.count > 0 {
-        greyView.hidden = false
+        selectedIndexes=collectionView.indexPathsForSelectedItems()!
+        self.cameraButton.hidden = selectedIndexes.count > 0
+        greyViewHeight.constant = selectedIndexes.count > 0 ? kHeightLong : kHeightShort
+        self.animate()
         
-        }else{
-        greyView.hidden =  true
-        
-        }
-        
-        
-        
-        var cell = collectionView.cellForItemAtIndexPath(indexPath)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath)
         if cell?.selected == true {
-            //cell?.backgroundColor = UIColor.orangeColor()
+            
             cell?.layer.borderWidth = 4.0
             cell?.layer.borderColor = UIColor.grayColor().CGColor
-            
-            
-            
             greyViewHeight.constant=kHeightLong
-            
-            
-            
+         
         }
         else
         {
             greyViewHeight.constant=kHeightShort
             cell?.layer.borderWidth = 0.0}
+               self.animate()
+   
+      
         
-        
-        
-        
-        
-        
-        UIView.animateWithDuration(2, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 15, options: [], animations: {
-            
-             self.myView.layoutIfNeeded()
-            
-            
-        }) {
-            _ in
-            
-            
-            
-            
-        }
-        
-        index = indexPath.item
-        
-        print("You selected cell #\(indexPath.item)!")
+       
     }
     
     
     // Cell Did DESelect
     func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        var cell = collectionView.cellForItemAtIndexPath(indexPath)
+        let cell = collectionView.cellForItemAtIndexPath(indexPath)
         cell?.layer.borderWidth = 0.0
         
         selectedIndexes = collectionView.indexPathsForSelectedItems()!
-
-        if collectionView.indexPathsForSelectedItems()!.count > 0 {
-            greyView.hidden = false
-            
-        }else{
-            greyView.hidden =  true
-            
-        }
-
+        greyViewHeight.constant = selectedIndexes.count > 0 ? kHeightLong : kHeightShort
+        self.animate()
+        self.cameraButton.hidden = selectedIndexes.count > 0
         
-        print(selectedIndexes.count)
+       
         
     }
     
@@ -210,37 +179,106 @@ selectedIndexes=collectionView.indexPathsForSelectedItems()!
     
     @IBAction func actionOnShare(sender: AnyObject) {
         
+
         
-    }
+        
+        if collectionView.indexPathsForSelectedItems()?.count <= 1
+        {
+            // Create the alert controller
+            let alertController = UIAlertController(title: "Social", message: "Choose Your Option", preferredStyle: .Alert)
+            
+            // Create the actions
+            let facebookAction = UIAlertAction(title: "Facebook", style: UIAlertActionStyle.Default) {
+                UIAlertAction in
+                 self.postOnFacebook()
+           
+            
+            }
+            let twitterAction = UIAlertAction(title: "Twitter", style: UIAlertActionStyle.Default) {
+                UIAlertAction in
+               self.postOnTwitter()
+            }
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel) {
+                UIAlertAction in
+                //alertController .removeFromParentViewController()
+            }
+
+            
+            
+            // Add the actions
+            alertController.addAction(facebookAction)
+            alertController.addAction(twitterAction)
+            alertController.addAction(cancelAction)
+            // Present the controller
+            self.presentViewController(alertController, animated: true, completion: nil)
+            
+            
+            
+        }else
+        {
+        
+            let alertController = UIAlertController(title: "Alert", message:
+                "Select a single Image to share", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+            
+            self.presentViewController(alertController, animated: true, completion: nil)
+            
+
+        
+        }
+   
+        
+        
+        
+        }
+    
     
     
     // save Button Clicked
     @IBAction func actionOnSave(sender: AnyObject) {
-        print (index)
+      
         
-        if let x = index {
-            let image = images[x]
-            let imageData = UIImageJPEGRepresentation(image, 0.6)
+        if let selectedIndexes = collectionView.indexPathsForSelectedItems() {
+
+           
             
+            for idx in selectedIndexes {
+                let image = images[idx.item]
+                let imageData = UIImageJPEGRepresentation(image, 0.6)
+                
+                
+                let compressedJPGImage = UIImage(data: imageData!)
+                UIImageWriteToSavedPhotosAlbum(compressedJPGImage!, nil, nil, nil)
+                
+            }
+            let alertController = UIAlertController(title: "WoW", message:
+                "Your \(selectedIndexes.count ) images has been saved to Photo Library!", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
             
-            let compressedJPGImage = UIImage(data: imageData!)
-            UIImageWriteToSavedPhotosAlbum(compressedJPGImage!, nil, nil, nil)
+            self.presentViewController(alertController, animated: true, completion: nil)
             
-            let alert = UIAlertView(title: "Wow",
-                                    message: "Your image has been saved to Photo Library!",
-                                    delegate: nil,
-                                    cancelButtonTitle: "Ok")
-            index=nil
-            alert.show()
+            greyViewHeight.constant =  kHeightShort
+            self.cameraButton.hidden = false
+            self.animate()
+            
+            collectionView.reloadData()
+
+            
         }else{
             
+
             
-            let alert = UIAlertView(title: "Alert",
-                                    message: "No images selected!",
-                                    delegate: nil,
-                                    cancelButtonTitle: "Ok")
+            let alertController = UIAlertController(title: "Alert", message:
+                "No images Seelected", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
             
-            alert.show()
+            self.presentViewController(alertController, animated: true, completion: nil)
+            
+  
+            
+            
+            
         }
         
         
@@ -258,33 +296,69 @@ selectedIndexes=collectionView.indexPathsForSelectedItems()!
     // Delete Button Clicked
     @IBAction func actionOnDelete(sender: AnyObject) {
         
+        if sender is UIButton {
+            
+        
+        
+
         if  collectionView.indexPathsForSelectedItems()!.count > 0
         {
         
             let idxsToRemove = collectionView.indexPathsForSelectedItems()!.map({ $0.item })
             images = images.enumerate().filter({ !idxsToRemove.contains($0.0) }).map({ $0.1 })
-            print(collectionView.indexPathsForSelectedItems()!.count)
-            greyView.hidden =  true
+            
+            
+            greyViewHeight.constant =  kHeightShort
+            self.cameraButton.hidden = false
+            self.animate()
+
             collectionView.reloadData()
             
         }else{
             
             
-            let alert = UIAlertView(title: "Alert",
-                                    message: "No images selected!",
-                                    delegate: nil,
-                                    cancelButtonTitle: "Ok")
+            let alertController = UIAlertController(title: "Alert", message:
+                "No images Seelected", preferredStyle: UIAlertControllerStyle.Alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
             
-            alert.show()
+            self.presentViewController(alertController, animated: true, completion: nil)
+            
+            
         }
         
         
         
     }
     
-    
-    
-    
+    }
 
 
+    func   animate(){
+        
+        UIView.animateWithDuration(0.7, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 15, options: [], animations: {
+            
+            self.myView.layoutIfNeeded()
+            
+            
+        }) {
+            _ in
+            
+            
+            
+            
+        }
+        
+        
+        
+    }
 }
+
+
+
+
+
+
+
+
+
+

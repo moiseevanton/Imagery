@@ -14,6 +14,10 @@
 		BA5ADBE11D147B34004ACFD5 /* Edit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA5ADBE01D147B34004ACFD5 /* Edit.storyboard */; };
 		BA5ADC101D148308004ACFD5 /* GPUImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BA5ADC0D1D1482F4004ACFD5 /* GPUImage.framework */; };
 		BA5ADC111D148312004ACFD5 /* GPUImage.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BA5ADC0D1D1482F4004ACFD5 /* GPUImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		BA78EC4C1D199541004DEE8D /* images.jpg in Resources */ = {isa = PBXBuildFile; fileRef = BA78EC4B1D199541004DEE8D /* images.jpg */; };
+		BA78EC531D1998D9004DEE8D /* lens.png in Resources */ = {isa = PBXBuildFile; fileRef = BA78EC521D1998D9004DEE8D /* lens.png */; };
+		BAD193101D188323007D6039 /* ViewController+Social.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD1930F1D188323007D6039 /* ViewController+Social.swift */; };
+		BAD193141D1887B8007D6039 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BAD193131D1887B8007D6039 /* Social.framework */; };
 		E9103E4A1D10810200C900A3 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9103E491D10810200C900A3 /* Filter.swift */; };
 		E9103E501D11B27700C900A3 /* FilterGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9103E4F1D11B27700C900A3 /* FilterGroup.swift */; };
 		E91AD1221D1046C2000ED124 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E91AD1211D1046C2000ED124 /* AppDelegate.swift */; };
@@ -80,6 +84,10 @@
 		BA5ADBB71D146A57004ACFD5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		BA5ADBE01D147B34004ACFD5 /* Edit.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Edit.storyboard; sourceTree = "<group>"; };
 		BA5ADC041D1482F4004ACFD5 /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = Imagery/GPUImage.xcodeproj; sourceTree = "<group>"; };
+		BA78EC4B1D199541004DEE8D /* images.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = images.jpg; sourceTree = "<group>"; };
+		BA78EC521D1998D9004DEE8D /* lens.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lens.png; sourceTree = "<group>"; };
+		BAD1930F1D188323007D6039 /* ViewController+Social.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ViewController+Social.swift"; sourceTree = "<group>"; };
+		BAD193131D1887B8007D6039 /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		E9103E491D10810200C900A3 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		E9103E4F1D11B27700C900A3 /* FilterGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterGroup.swift; sourceTree = "<group>"; };
 		E91AD11E1D1046C2000ED124 /* Imagery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Imagery.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +108,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAD193141D1887B8007D6039 /* Social.framework in Frameworks */,
 				BA5ADC101D148308004ACFD5 /* GPUImage.framework in Frameworks */,
 				F1D8C54ACDFB104C13B8B5AA /* Pods_Imagery.framework in Frameworks */,
 			);
@@ -127,6 +136,7 @@
 		8E64A2151CCA9EF1971BE4D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BAD193131D1887B8007D6039 /* Social.framework */,
 				B189384A272DD09ED094E955 /* Pods_Imagery.framework */,
 				BA5ADC041D1482F4004ACFD5 /* GPUImage.xcodeproj */,
 			);
@@ -149,6 +159,15 @@
 				BA5ADC0D1D1482F4004ACFD5 /* GPUImage.framework */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BA78EC541D199A66004DEE8D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				BA78EC521D1998D9004DEE8D /* lens.png */,
+				BA78EC4B1D199541004DEE8D /* images.jpg */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 		E91AD1151D1046C1000ED124 = {
@@ -176,6 +195,7 @@
 			children = (
 				BA5ADBB91D146A99004ACFD5 /* Storyboards */,
 				BA5ADBB51D146A32004ACFD5 /* Album.swift */,
+				BAD1930F1D188323007D6039 /* ViewController+Social.swift */,
 				BA5ADBB31D146A24004ACFD5 /* CustomCollectionViewCell.swift */,
 				BA5ADBB11D146A17004ACFD5 /* MainViewController.swift */,
 				E91AD1211D1046C2000ED124 /* AppDelegate.swift */,
@@ -184,6 +204,7 @@
 				E9103E4F1D11B27700C900A3 /* FilterGroup.swift */,
 				E91AD1521D105932000ED124 /* FilterCell.swift */,
 				E91AD12B1D1046C2000ED124 /* Assets.xcassets */,
+				BA78EC541D199A66004DEE8D /* Images */,
 				E91AD12D1D1046C2000ED124 /* LaunchScreen.storyboard */,
 				E91AD1301D1046C2000ED124 /* Info.plist */,
 				E91AD1281D1046C2000ED124 /* Imagery.xcdatamodeld */,
@@ -255,6 +276,7 @@
 				TargetAttributes = {
 					E91AD11D1D1046C2000ED124 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 3TB3LSTA6F;
 					};
 					E91AD1341D1046C2000ED124 = {
 						CreatedOnToolsVersion = 7.3;
@@ -312,7 +334,9 @@
 				E91AD12F1D1046C2000ED124 /* LaunchScreen.storyboard in Resources */,
 				BA5ADBE11D147B34004ACFD5 /* Edit.storyboard in Resources */,
 				E91AD12C1D1046C2000ED124 /* Assets.xcassets in Resources */,
+				BA78EC531D1998D9004DEE8D /* lens.png in Resources */,
 				BA5ADBB81D146A57004ACFD5 /* Main.storyboard in Resources */,
+				BA78EC4C1D199541004DEE8D /* images.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +407,7 @@
 				E9103E4A1D10810200C900A3 /* Filter.swift in Sources */,
 				BA5ADBB41D146A24004ACFD5 /* CustomCollectionViewCell.swift in Sources */,
 				E91AD1531D105932000ED124 /* FilterCell.swift in Sources */,
+				BAD193101D188323007D6039 /* ViewController+Social.swift in Sources */,
 				BA5ADBB61D146A32004ACFD5 /* Album.swift in Sources */,
 				E91AD1241D1046C2000ED124 /* EditViewController.swift in Sources */,
 				E91AD1221D1046C2000ED124 /* AppDelegate.swift in Sources */,
@@ -516,11 +541,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Imagery/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.moiseevanton.Imagery;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -530,11 +558,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Imagery/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.moiseevanton.Imagery;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
