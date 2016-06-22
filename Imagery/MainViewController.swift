@@ -122,7 +122,6 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
     // MARK: - UICollectionViewDelegate protocol
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
         selectedIndexes=collectionView.indexPathsForSelectedItems()!
         self.cameraButton.hidden = selectedIndexes.count > 0
         greyViewHeight.constant = selectedIndexes.count > 0 ? kHeightLong : kHeightShort
@@ -157,9 +156,6 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
         greyViewHeight.constant = selectedIndexes.count > 0 ? kHeightLong : kHeightShort
         self.animate()
         self.cameraButton.hidden = selectedIndexes.count > 0
-        
-       
-        
     }
     
     
@@ -288,9 +284,23 @@ UINavigationControllerDelegate,UICollectionViewDataSource, UICollectionViewDeleg
    // edit Button Clicked
     
     @IBAction func actionOnEdit(sender: AnyObject) {
-        
-        
-        
+        if selectedIndexes.count > 1 {
+            let alertController = UIAlertController.init(title: "Warning!", message: "Cannot edit multiple photos, please choose one.", preferredStyle: UIAlertControllerStyle.Alert)
+            let alertAction = UIAlertAction.init(title: "Got it!", style: UIAlertActionStyle.Default, handler: nil)
+            alertController.addAction(alertAction)
+            self.presentViewController(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    // pass the photo to edit view controller
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "editSegue" {
+            let ip = selectedIndexes.lastObject as! NSIndexPath
+            let cell = collectionView.cellForItemAtIndexPath(ip) as! CustomCollectionViewCell
+            let dvc = segue.destinationViewController as! EditViewController
+            dvc.originalPhoto = cell.imagePicked.image
+        }
     }
     
     // Delete Button Clicked
