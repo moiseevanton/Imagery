@@ -22,10 +22,11 @@
                                 <rect key="frame" x="0.0" y="647" width="375" height="20"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZmN-Xa-6HD">
-                                        <rect key="frame" x="162" y="0.0" width="30" height="20"/>
+                                        <rect key="frame" x="8" y="0.0" width="359" height="25"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="20" id="irr-Rw-UsK"/>
+                                            <constraint firstAttribute="height" constant="25" id="irr-Rw-UsK"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <state key="normal" title="▲"/>
                                         <connections>
                                             <action selector="bottomBarTouched:" destination="O8g-IO-gpL" eventType="touchUpInside" id="jNn-IS-3RB"/>
@@ -35,18 +36,23 @@
                                 <color key="backgroundColor" red="0.81568627449999997" green="0.81568627449999997" blue="0.81568627449999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="ZmN-Xa-6HD" secondAttribute="trailing" constant="8" id="9K4-T9-sCH"/>
                                     <constraint firstItem="ZmN-Xa-6HD" firstAttribute="top" secondItem="OaO-8k-LQ0" secondAttribute="top" id="Alx-bC-76o"/>
+                                    <constraint firstItem="ZmN-Xa-6HD" firstAttribute="leading" secondItem="OaO-8k-LQ0" secondAttribute="leading" constant="8" id="Csv-RL-nlM"/>
                                     <constraint firstAttribute="bottom" secondItem="ZmN-Xa-6HD" secondAttribute="bottom" id="EZK-dT-Ckh"/>
+                                    <constraint firstItem="ZmN-Xa-6HD" firstAttribute="top" secondItem="OaO-8k-LQ0" secondAttribute="top" id="LRv-O6-niA"/>
+                                    <constraint firstItem="ZmN-Xa-6HD" firstAttribute="centerX" secondItem="OaO-8k-LQ0" secondAttribute="centerX" id="R1Y-ia-OcW"/>
                                     <constraint firstItem="ZmN-Xa-6HD" firstAttribute="centerX" secondItem="OaO-8k-LQ0" secondAttribute="centerX" id="X1O-rN-nw4"/>
                                     <constraint firstAttribute="height" constant="20" id="YqI-c0-Y1z"/>
-                                    <constraint firstAttribute="trailing" secondItem="ZmN-Xa-6HD" secondAttribute="trailing" constant="183" id="a9r-ju-vhM"/>
-                                    <constraint firstItem="ZmN-Xa-6HD" firstAttribute="leading" secondItem="OaO-8k-LQ0" secondAttribute="leading" constant="162" id="vbR-As-SLG"/>
+                                    <constraint firstItem="ZmN-Xa-6HD" firstAttribute="centerY" secondItem="OaO-8k-LQ0" secondAttribute="centerY" id="wGp-OL-nb0"/>
                                     <constraint firstItem="ZmN-Xa-6HD" firstAttribute="centerY" secondItem="OaO-8k-LQ0" secondAttribute="centerY" id="yDB-s1-sCB"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="Alx-bC-76o"/>
                                         <exclude reference="EZK-dT-Ckh"/>
                                         <exclude reference="X1O-rN-nw4"/>
+                                        <exclude reference="wGp-OL-nb0"/>
                                         <exclude reference="yDB-s1-sCB"/>
                                     </mask>
                                 </variation>
@@ -72,10 +78,10 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vWw-0M-zUS">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="60"/>
+                                                    <rect key="frame" x="0.0" y="0.5" width="50" height="60"/>
                                                 </imageView>
                                                 <view alpha="0.63" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lZn-ft-NbV">
-                                                    <rect key="frame" x="0.0" y="45" width="50" height="15"/>
+                                                    <rect key="frame" x="0.0" y="45.5" width="50" height="15"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GCF-Uj-6Hp">
                                                             <rect key="frame" x="8" y="0.0" width="34" height="15"/>

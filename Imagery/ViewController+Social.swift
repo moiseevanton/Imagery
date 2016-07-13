@@ -8,6 +8,7 @@
 
 import Foundation
 import Social
+import Material
 
 extension MainViewController {
 
@@ -18,18 +19,19 @@ func postOnTwitter()
             let twitterSheet:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
             let index = collectionView.indexPathsForSelectedItems()?.last
             twitterSheet.setInitialText("Shared from Imagery App")
-            twitterSheet.addImage(images[(index?.item)!])
+            let photo: Photo = photos[index!.item]
+            let imageData: NSData = photo.image!
+            let image: UIImage = UIImage(data: imageData)!
+            twitterSheet.addImage(image)
             
             self.presentViewController(twitterSheet, animated: true, completion: nil)
-            
            
             twitterSheet.completionHandler = {(result: SLComposeViewControllerResult) in
                 
                 switch (result) {
-                case (SLComposeViewControllerResult.Cancelled):
-                    //print("canceled")
+                case (.Cancelled):
                 break
-                case (SLComposeViewControllerResult.Done):
+                case (.Done):
                     
                     dispatch_async(dispatch_get_main_queue()) {
                         
@@ -90,7 +92,10 @@ func postOnTwitter()
             let index = collectionView.indexPathsForSelectedItems()?.last
 
             facebookSheet.setInitialText("Shared from  Imagery App")
-           facebookSheet.addImage(images[(index?.item)!])
+            let photo: Photo = photos[index!.item]
+            let imageData: NSData = photo.image!
+            let image: UIImage = UIImage(data: imageData)!
+            facebookSheet.addImage(image)
             self.presentViewController(facebookSheet, animated: true, completion: nil)
         } else {
             let alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.Alert)

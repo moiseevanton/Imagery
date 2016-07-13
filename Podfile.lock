@@ -1,12 +1,18 @@
 PODS:
   - ALCameraViewController (1.2.0)
+  - Material (1.41.3)
+  - NVActivityIndicatorView (2.7)
 
 DEPENDENCIES:
   - ALCameraViewController
+  - Material (~> 1.0)
+  - NVActivityIndicatorView
 
 SPEC CHECKSUMS:
   ALCameraViewController: 03b480d0b41d3afc21fca48fc45345893ce2680a
+  Material: cd460f3e3f1cfa62626391186b6a4105889250c2
+  NVActivityIndicatorView: dc80f18fb27ac92f0aa87246cc13dc39ed3e9ee0
 
-PODFILE CHECKSUM: d7c73982b595415d1d9f27bf908b132d61737a45
+PODFILE CHECKSUM: 9ee317a06e9aeb3146c0a2e174ce76d31a1d7f27
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.0.0

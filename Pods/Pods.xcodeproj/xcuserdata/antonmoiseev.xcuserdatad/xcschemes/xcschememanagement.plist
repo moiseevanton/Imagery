@@ -9,7 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>GPUImage.xcscheme</key>
+		<key>Material-io.cosmicmind.material.fonts.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Material-io.cosmicmind.material.icons.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Material.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>NVActivityIndicatorView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -22,12 +37,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>07D1FEECE7E55AEAC3FAD761EDEE9204</key>
+		<key>332253B889A65B72B443443675808351</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>18D062C56E985F0F564CF84E046CC80D</key>
+		<key>958EC39DD79BF94E1C5BECA416A02062</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>B089559E351F0F16411C9503E770FC3B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BDDC4DBF7654960710F7FF7B28F35033</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -37,7 +62,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA0DD8ED489933744D70DD4A9719ED01</key>
+		<key>DE9B0536CD7D58980FF5CD1F2E927CF6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
